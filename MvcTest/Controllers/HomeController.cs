@@ -35,20 +35,26 @@ namespace MvcTest.Controllers
         [HttpPost]
         public ActionResult PostName(FormModel model)
         {
-            if (this.HttpContext.Request.Files.Count == 1)
+            this.ValidateModel(model);
+            var fileContent = default(byte[]);
+            if (this.HttpContext.Request.Files.Count > 0)
             {
-                var file = this.HttpContext.Request.Files[0];
-                using (var fs = file.InputStream)
+                using (var fs = this.HttpContext.Request.Files[0].InputStream)
                 {
                     using (var ms = new MemoryStream())
                     {
                         fs.CopyTo(ms);
                         ms.Flush();
-                        model.FileContent = ms.ToArray();
+                        fileContent = ms.ToArray();
                     }
                 }
             }
-            return this.Json(model);
+            return this.Json(new
+            {
+                model.Id,
+                model.Name,
+                Content = System.Text.Encoding.UTF8.GetString(fileContent)
+            });
         }
 
     }

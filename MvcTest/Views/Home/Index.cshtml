@@ -12,7 +12,7 @@
 </div>
 
 <div class="row">
-    @using (Ajax.BeginForm("PostName", new AjaxOptions() { HttpMethod = "Post" }))
+    @using (Ajax.BeginForm("PostName", null, new AjaxOptions() { HttpMethod = "Post" }, new { enctype = "multipart/form-data" }))
     {
         <input id="Id" name="Id" value="123" hidden="hidden" />
         <div class="well bs-component">
