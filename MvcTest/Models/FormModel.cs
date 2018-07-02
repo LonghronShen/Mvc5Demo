@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,6 +17,8 @@ namespace MvcTest.Models
         [Required]
         [Display(Description = "Name")]
         public string Name { get; set; }
+
+        public byte[] FileContent { get; set; }
 
     }
 
