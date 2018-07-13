@@ -32,6 +32,23 @@ namespace MvcTest.Controllers
             return View();
         }
 
+        public ActionResult ShowImgs()
+        {
+            return this.View();
+        }
+
+        public ActionResult GetItems(int startIndex, int count)
+        {
+            var list = Enumerable.Range(0, 100)
+                .Skip(startIndex).Take(count)
+                .Select(x => new ItemModel()
+                {
+                    Id = x,
+                    ImgUrl = $"/Content/img/a-(x).jpg"
+                });
+            return this.Json(list);
+        }
+
         [HttpPost]
         public ActionResult PostName(FormModel model)
         {
