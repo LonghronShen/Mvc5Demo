@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -49,6 +50,11 @@ namespace MvcTest.Controllers
             return this.Json(list);
         }
 
+        public ActionResult ShowImg(string id)
+        {
+            return this.File(new byte[0], "image/jpeg");
+        }
+
         [HttpPost]
         public ActionResult PostName(FormModel model)
         {
@@ -70,7 +76,7 @@ namespace MvcTest.Controllers
             {
                 model.Id,
                 model.Name,
-                Content = System.Text.Encoding.UTF8.GetString(fileContent)
+                Content = fileContent != null ? Encoding.UTF8.GetString(fileContent) : null
             });
         }
 
