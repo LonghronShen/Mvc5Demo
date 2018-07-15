@@ -1,14 +1,68 @@
-﻿@model IEnumerable<MvcTest.Models.ItemModel>
-
-@{
+﻿@{
     ViewBag.Title = "ShowImgs";
 }
 
-<div class="">
-
+<div id="app" class="row">
+    <div id="conScroll">
+        <div id="masonry" class="container-fluid">
+            @{
+                Html.RenderAction("GetItemView", new { page = 1 });
+            }
+        </div>
+    </div>
+    <div id="page-nav">
+        <a href="@Url.Action("GetItems", "Home", new { count = 10, startIndex = 0 })"></a>
+    </div>
 </div>
 
 @section scripts
 {
-    <script src="/path/to/masonry.pkgd.min.js"></script>
+    <script src="~/Scripts/vue.min.js"></script>
+
+    <script src="~/Scripts/jquery.masonry.min.js"></script>
+    <script src="~/Scripts/jquery.infinitescroll.min.js"></script>
+
+    <script type="text/javascript">
+        var currentPage = 0;
+
+        $(function () {
+            var $container = $('.grid');
+            $container.imagesLoaded(function () {
+                $container.masonry({
+                    itemSelector: '.grid',
+                    gutterWidth: 20,
+                    isAnimated: true,
+                });
+            });
+
+            infiniteScroll = function () {
+                // infinite scrolling
+                var $container = $('#masonry');
+                $container.infinitescroll({
+                    binder: $('#conScroll'),
+                    navSelector: '#page-nav',    // selector for the paged navigation
+                    nextSelector: '#page-nav a',  // selector for the NEXT link (to page 2)
+                    itemSelector: '.box',         // selector for all items you'll retrieve
+                    pixelsFromNavToBottom: 150,
+                    extraScrollPx: 50,
+                    debug        : true,
+                    prefill: true,
+                    bufferPx: 1,
+                    path: function (page) {
+                        return "@Url.Action("GetItemView", "Home")?page=" + page;
+                    },
+                    loading: {
+                        finishedMsg: 'no more images！',
+                        msgText: 'onload old images',
+                        img: '@Url.Content("~/Content/img/loading-dark.gif")'
+                    }
+                },
+                function (nextComments) {
+                    var $nextComm = $(nextComments);
+                    $container.masonry('appended', $nextComm, true);
+                });
+            }
+            infiniteScroll();
+        });
+    </script>
 }

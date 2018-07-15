@@ -1,0 +1,8 @@
+﻿@model IEnumerable<MvcTest.Models.ItemModel>
+
+<div class="box">
+    @foreach (var item in Model)
+    {
+        <img src="@item.ImgUrl" />
+    }
+</div>

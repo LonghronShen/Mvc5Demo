@@ -40,14 +40,34 @@ namespace MvcTest.Controllers
 
         public ActionResult GetItems(int startIndex, int count)
         {
-            var list = Enumerable.Range(0, 100)
+            var query = Enumerable.Range(0, 100);
+            var total = query.Count();
+            var list = query
                 .Skip(startIndex).Take(count)
                 .Select(x => new ItemModel()
                 {
                     Id = x,
-                    ImgUrl = $"/Content/img/a-(x).jpg"
+                    ImgUrl = $"/Content/img/a-({x}).jpg"
                 });
-            return this.Json(list);
+            return this.Json(new
+            {
+                Items = list,
+                Total = total
+            });
+        }
+
+        public ActionResult GetItemView(int page)
+        {
+            var query = Enumerable.Range(0, 100);
+            var total = query.Count();
+            var list = query
+                .Skip(page * 10).Take(10)
+                .Select(x => new ItemModel()
+                {
+                    Id = x,
+                    ImgUrl = $"/Content/img/a-({x}).jpg"
+                });
+            return this.View(list);
         }
 
         public ActionResult ShowImg(string id)
